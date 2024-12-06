@@ -1,0 +1,42 @@
+﻿@page "/Todo"
+@using TODO.Data
+<h3>ToDo</h3>
+
+<ul>
+	@foreach (var todo in todos)
+	{
+		<li> @todo.Title</li>
+	}
+</ul>
+<input placeholder="Something to do " @bind="newTodo" />
+<button @onclick="AddTodo">Add todo</button>
+
+@code {
+    //lista u koju ćemo pospremati naše todo-ove (glumi bazu)
+    private List<Data.ToDoItem> todos = new List<ToDoItem>();
+    //string u kojeg ćemo posremiti novi todo
+	private string newTodo;
+	private void AddTodo()
+	{
+		//ako je nešto uneseno
+		if (!string.IsNullOrEmpty(newTodo))
+		{
+			//dodaj novi todo u listu
+			todos.Add(new ToDoItem { Title = newTodo });
+			//resetiraj vrijednost na prazan string
+			newTodo = string.Empty;
+		}
+	}
+
+}
+<div class=" nav-item px-3">
+	<NavLink class="nav-link" href="fetchdata">
+		<span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+	</NavLink>
+</div>
+<div class=" nav-item px-3">
+	<NavLink class="nav-link" href="todo">
+		<span class="oi oi-list-rich" aria-hidden="true"></span> ToDo
+	</NavLink>
+</div>
+
