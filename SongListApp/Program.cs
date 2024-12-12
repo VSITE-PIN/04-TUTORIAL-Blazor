@@ -1,13 +1,24 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using SongListApp.Data;
+using System;
+using Microsoft.EntityFrameworkCore;
+using SongListApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDbContext<AppDbContext>(options =>
+
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
+ ?? throw new InvalidOperationException("Connection string DefaultConnStringnot found.")));
+
+
 // Add services to the container.
+builder.Services.AddScoped<SongsService>();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+
 
 var app = builder.Build();
 
