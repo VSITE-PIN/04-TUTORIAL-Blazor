@@ -1,0 +1,35 @@
+﻿body {
+}
+.completed {
+    text-decoration: line-through;
+}
+@page
+
+"/"
+@if (tasks == null) {
+    <p><em>Loading ... </em></p>
+}
+
+else {
+    <ul> @foreach (var todo in tasks)
+
+{
+    <li> <input type="checkbox" checked="@todo.IsDone" @onchange="@(()=>CheckboxChecked(todo))" /> @
+
+{
+    if (todo.IsDone)
+
+{
+    <span class="@((todo.IsDone? "completed": ""))"> @todo.Title </span> //omogući brisanje ako je napravljeno <button class="btn btn-outline-danger btn sm" title="Deletetask" @onclick="@(()=>DeleteTask(todo))"> <span class="oi oi-trash"></span> </button>
+}
+
+else {
+    <input class="badge-danger" @bind="todo.Title" />
+}
+
+}
+</li >
+}
+</ul >
+}
+

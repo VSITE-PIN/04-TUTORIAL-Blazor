@@ -7,3 +7,33 @@
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+@page "/"
+@if (tasks == null)
+{
+    <p><em>Loading ... </em></p>
+}
+else
+{
+    <ul>
+        @foreach (var todo in tasks)
+        {
+            <li>
+                <input type="checkbox" @bind="todo.IsDone" />
+                @{
+                    if (todo.IsDone)
+                    {
+                        <input class="badge-success" @bind="todo.Title" />
+                        //omogući brisanje ako je napravljeno
+                        <button class="btn btn-outline-danger btn sm" title="Deletetask">
+                            <span class="oi oi-trash"></span>
+                        </button>
+                    }
+                    else
+                    {
+                        <input class="badge-danger" @bind="todo.Title" />
+                    }
+                }
+            </li>
+        }
+    </ul>
+}
