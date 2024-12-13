@@ -9,6 +9,7 @@ namespace TODO.CoreHosted.Server.Pages
 
 		private IList<TodoItem> tasks;
 		private string error;
+		private string? newTodo;
 
 		protected override async Task OnInitializedAsync()
 		{
@@ -20,6 +21,51 @@ namespace TODO.CoreHosted.Server.Pages
 			catch (Exception)
 			{
 				error = "Error Encountered";
+			}
+		}
+		private async Task CheckboxChecked(TodoItem task)
+		{
+			task.IsDone = !task.IsDone;
+			string requestUri = $"TodoItems/{task.Id}";
+			//pozivamo metodu za ažuriranje
+			var response = await Http.PutAsJsonAsync<TodoItem>(requestUri, task);
+			if (!response.IsSuccessStatusCode)
+			{
+				error = response.ReasonPhrase;
+			};
+		}
+		private async Task DeleteTask(TodoItem task)
+		{
+			tasks.Remove(task);
+			string requestUri = $"TodoItems/{task.Id}";
+			var response = await Http.DeleteAsync(requestUri);
+			if (!response.IsSuccessStatusCode)
+			{
+				error = response.ReasonPhrase;
+			}
+		}
+
+		private async Task AddTask()
+		{
+			if (!string.IsNullOrWhiteSpace(newTodo))
+			{
+				TodoItem newTaskItem = new TodoItem
+				{
+					Title = newTodo,
+					IsDone = false
+				};
+				tasks.Add(newTaskItem);
+				string requestUri = "TodoItems";
+				var response = await Http.PostAsJsonAsync(requestUri,
+				newTaskItem);
+				if (response.IsSuccessStatusCode)
+				{
+					newTodo = string.Empty;
+				}
+				else
+				{
+					error = response.ReasonPhrase;
+				}
 			}
 		}
 	}
