@@ -5,9 +5,9 @@ using SongListApp.Data;
 using SongListApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") 
-    ?? throw new InvalidOperationException("Connection string DefaultConnStringnot found.")));
+builder.Services.AddDbContext<AppDbContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("DataContext")
+        ?? throw new InvalidOperationException("Connection string DefaultConnString not found.")));
 
 // Add services to the container.
 builder.Services.AddRazorPages();
