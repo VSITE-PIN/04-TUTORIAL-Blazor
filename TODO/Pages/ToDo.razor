@@ -1,6 +1,6 @@
 ﻿@page "/Todo"
-@using TODO.Data
-<h3>ToDo</h3>
+@using BlazorTODO.Data
+<h3>ToDo (@todos.Count(todo => !todo.IsDone)) </h3>
 
 <ul>
 	@foreach (var todo in todos)
