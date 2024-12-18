@@ -131,14 +131,14 @@ else
 				Artist = artist,
 				Year = year
 			};
-		await songService.UpdateSongAsync(id, s);
+		await songService.UpdateSongAsync(song.Id, s);
 		ClearFields();
 		await Load();
 		mode = MODE.None;
 	}
 	protected async Task Delete()
 	{
-		await songService.DeleteSongAsync(id);
+		await songService.DeleteSongAsync(song.Id);
 		ClearFields();
 		await Load();
 		mode = MODE.None;
