@@ -2,9 +2,9 @@
 
 @page "/"
 @if (tasks == null)
-{
-<p><em>Loading ... </em></p>
-}
+	{
+		<p><em>Loading ... </em></p>
+	}
 else
 {
 	<h3>To Do (@tasks.Count(todo => !todo.IsDone))</h3>
@@ -12,11 +12,11 @@ else
 	<button class="btn btn-success" @onclick="AddTask">Add To Do</button>
 	<ul>
 @foreach (var todo in tasks)
-{
-<li>
-				<input type="checkbox" checked="@todo.IsDone" @onchange="@(()=>CheckboxChecked(todo))" />
-@{
-if (todo.IsDone)
+	{
+	<li>
+					<input type="checkbox" checked="@todo.IsDone" @onchange="@(()=>CheckboxChecked(todo))" />
+	@{
+	if (todo.IsDone)
 {
 <input class="badge-success" @bind="todo.Title" />
 //omogući brisanje ako je napravljeno
