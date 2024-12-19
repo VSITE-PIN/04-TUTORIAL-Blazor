@@ -1,0 +1,142 @@
+﻿@page "/songs"
+@inject SongsService songsService
+
+<h1>My Song List</h1>
+<p>This component demonstrates managing a Song list.</p>
+
+@if (songs == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <button @onclick="Add" class="btn btn-success">Add</button>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Artist</th>
+                <th>Year</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var song in songs)
+            {
+                <tr @onclick="() => Show(song.Id)">
+                    <td>@song.Id</td>
+                    <td>@song.Title</td>
+                    <td>@song.Artist</td>
+                    <td>@song.Year</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (mode == Mode.Add)
+{
+    <input placeholder="Title" @bind="title" />
+    <br />
+    <input placeholder="Artist" @bind="artist" />
+    <br />
+    <input placeholder="Year" @bind="year" />
+    <br />
+    <button @onclick="Insert" class="btn btn-warning">Insert</button>
+}
+
+@if (mode == Mode.EditDelete)
+{
+    <input type="hidden" @bind="id" />
+    <br />
+    <input placeholder="Title" @bind="title" />
+    <br />
+    <input placeholder="Artist" @bind="artist" />
+    <br />
+    <input placeholder="Year" @bind="year" />
+    <br />
+    <button @onclick="Update" class="btn btn-primary">Update</button>
+    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <button @onclick="Delete" class="btn btn-danger">Delete</button>
+}
+
+@code {
+    private List<Song> songs;
+    private string id, title, artist, year;
+    private Mode mode = Mode.None;
+
+    private enum Mode { None, Add, EditDelete }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Load();
+    }
+
+    private async Task Load()
+    {
+        songs = await songsService.GetSongsAsync();
+    }
+
+    protected void Add()
+    {
+        ClearFields();
+        mode = Mode.Add;
+    }
+
+    protected async Task Show(string songId)
+    {
+        var song = await songsService.GetSongByIdAsync(songId);
+        if (song != null)
+        {
+            id = song.Id;
+            title = song.Title;
+            artist = song.Artist;
+            year = song.Year;
+            mode = Mode.EditDelete;
+        }
+    }
+
+    protected async Task Insert()
+    {
+        var newSong = new Song
+            {
+                Id = Guid.NewGuid().ToString(),
+                Title = title,
+                Artist = artist,
+                Year = year
+            };
+        await songsService.InsertSongAsync(newSong);
+        await Load();
+        mode = Mode.None;
+    }
+
+    protected async Task Update()
+    {
+        var updatedSong = new Song
+            {
+                Id = id,
+                Title = title,
+                Artist = artist,
+                Year = year
+            };
+        await songsService.UpdateSongAsync(id, updatedSong);
+        await Load();
+        mode = Mode.None;
+    }
+
+    protected async Task Delete()
+    {
+        await songsService.DeleteSongAsync(id);
+        await Load();
+        mode = Mode.None;
+    }
+
+    private void ClearFields()
+    {
+        id = string.Empty;
+        title = string.Empty;
+        artist = string.Empty;
+        year = string.Empty;
+    }
+}
