@@ -14,6 +14,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TODO.CoreHosted.Shared", "TODO.CoreHosted\Shared\TODO.CoreHosted.Shared.csproj", "{DB41AC9B-F57B-4813-91B5-16CE5D65EF22}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Blazor.Webassembly", "Blazor.Webassembly", "{64BD320F-D34C-49FD-AF77-79F85121E6A6}"
+	ProjectSection(SolutionItems) = preProject
+		TextFile1.txt = TextFile1.txt
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Blazor.Server", "Blazor.Server", "{619AF347-FBFD-4E01-9C8F-8AC60323A182}"
 EndProject
