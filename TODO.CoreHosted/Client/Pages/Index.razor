@@ -1,9 +1,45 @@
 ﻿@page "/"
 
-<PageTitle>Index</PageTitle>
+@if (!string.IsNullOrEmpty(error))
+{
+    <p class="text-danger">@error</p>
+}
+else if (tasks == null)
+{
+    <p><em>Loading ... </em></p>
+}
+else
+{
+    <h3>To Do (@tasks.Count(todo => !todo.IsDone))</h3>
 
-<h1>Hello, world!</h1>
+    <input placeholder="Thing to do" @bind="newTodo" />
+    <button class="btn btn-success" @onclick="AddTask">Add To Do</button>
 
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+    <ul>
+        @foreach (var todo in tasks)
+        {
+            <li>
+                <input type="checkbox"
+                       checked="@todo.IsDone"
+                       @onchange="@(() => CheckboxChecked(todo))" />
+                @{
+                    if (todo.IsDone)
+                    {
+                        <span class="@(todo.IsDone ? "completed" : string.Empty)">
+                            @todo.Title
+                        </span>
+                        <button class="btn btn-outline-danger btn-sm"
+                                title="Delete task"
+                                @onclick="@(() => DeleteTask(todo))">
+                            <span class="oi oi-trash"></span>
+                        </button>
+                    }
+                    else
+                    {
+                        <input class="badge-danger" @bind="todo.Title" />
+                    }
+                }
+            </li>
+        }
+    </ul>
+}
